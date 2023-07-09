@@ -4,7 +4,6 @@ package com.solvd.ATMapp;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import java.sql.*;
 import java.util.*;
 
 public class Signup3 extends JFrame implements ActionListener{
@@ -18,7 +17,7 @@ public class Signup3 extends JFrame implements ActionListener{
         this.formno = formno;
         setTitle("NEW ACCOUNT APPLICATION FORM - PAGE 3");
     
-        ImageIcon i1 = new ImageIcon(ClassLoader.getSystemResource("icon/bank.jpg"));
+        ImageIcon i1 = new ImageIcon(ClassLoader.getSystemResource("bank.jpg"));
         Image i2 = i1.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT);
         ImageIcon i3 = new ImageIcon(i2);
         JLabel l14 = new JLabel(i3);

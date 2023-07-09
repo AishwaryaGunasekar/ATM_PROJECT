@@ -4,6 +4,7 @@ package com.solvd.ATMapp;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.sql.*;
 
@@ -15,7 +16,7 @@ public class Withdrawl extends JFrame implements ActionListener{
     String pin;
     Withdrawl(String pin){
         this.pin = pin;
-        ImageIcon i1 = new ImageIcon(ClassLoader.getSystemResource("icon/ATM.jpg"));
+        ImageIcon i1 = new ImageIcon(ClassLoader.getSystemResource("ATM.jpg"));
         Image i2 = i1.getImage().getScaledInstance(1000, 1180, Image.SCALE_DEFAULT);
         ImageIcon i3 = new ImageIcon(i2);
         JLabel l3 = new JLabel(i3);
@@ -67,6 +68,8 @@ public class Withdrawl extends JFrame implements ActionListener{
         try{        
             String amount = t1.getText();
             Date date = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String formattedDate = dateFormat.format(new Date());
             if(ae.getSource()==b1){
                 if(t1.getText().equals("")){
                     JOptionPane.showMessageDialog(null, "Please enter the Amount to you want to Withdraw");
@@ -76,18 +79,18 @@ public class Withdrawl extends JFrame implements ActionListener{
                     ResultSet rs = c1.s.executeQuery("select * from bank where pin = '"+pin+"'");
                     int balance = 0;
                     while(rs.next()){
-                       if(rs.getString("mode").equals("Deposit")){
-                           balance += Integer.parseInt(rs.getString("amount"));
-                       }else{
-                           balance -= Integer.parseInt(rs.getString("amount"));
-                       }
+                        if(rs.getString("Withdrawl").equals("Deposit")){
+                            balance += Integer.parseInt(rs.getString("amount"));
+                        }else{
+                            balance -= Integer.parseInt(rs.getString("amount"));
+                        }
                     }
                     if(balance < Integer.parseInt(amount)){
                         JOptionPane.showMessageDialog(null, "Insuffient Balance");
                         return;
                     }
                     
-                    c1.s.executeUpdate("insert into bank values('"+pin+"', '"+date+"', 'Withdrawl', '"+amount+"')");
+                    c1.s.executeUpdate("insert into bank values('"+pin+"', '"+formattedDate+"', 'Withdrawl', '"+amount+"')");
                     JOptionPane.showMessageDialog(null, "Rs. "+amount+" Debited Successfully");
                     
                     setVisible(false);

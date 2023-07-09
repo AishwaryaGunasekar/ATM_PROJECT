@@ -4,7 +4,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.sql.ResultSet;
 import javax.swing.*;
-import java.util.*;
 
 class BalanceEnquiry extends JFrame implements ActionListener {
 
@@ -16,7 +15,7 @@ class BalanceEnquiry extends JFrame implements ActionListener {
 	BalanceEnquiry(String pin) {
 		this.pin = pin;
 
-		ImageIcon i1 = new ImageIcon(ClassLoader.getSystemResource("icon/ATM.jpg"));
+		ImageIcon i1 = new ImageIcon(ClassLoader.getSystemResource("ATM.jpg"));
 		Image i2 = i1.getImage().getScaledInstance(1000, 1180, Image.SCALE_DEFAULT);
 		ImageIcon i3 = new ImageIcon(i2);
 		JLabel l3 = new JLabel(i3);
@@ -39,17 +38,20 @@ class BalanceEnquiry extends JFrame implements ActionListener {
 		int balance = 0;
 		try {
 			Conn c1 = new Conn();
-			ResultSet rs = c1.s.executeQuery("select * from bank where pin = '" + pin + "'");
+			ResultSet rs = c1.s.executeQuery("SELECT * FROM bank WHERE pin = '" + pin + "'");
 			while (rs.next()) {
-				if (rs.getString("mode").equals("Deposit")) {
+				if (rs.getString("Withdrawl").equals("Deposit")) {
 					balance += Integer.parseInt(rs.getString("amount"));
 				} else {
 					balance -= Integer.parseInt(rs.getString("amount"));
 				}
 			}
+			l1.setText("Your Current Account Balance is Rs " + balance);
+			rs.close(); // Close the ResultSet
+			c1.s.close(); // Close the Statement
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
-
 		l1.setText("Your Current Account Balance is Rs " + balance);
 
 		b1.addActionListener(this);

@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class FastCash extends JFrame implements ActionListener {
@@ -15,7 +16,7 @@ public class FastCash extends JFrame implements ActionListener {
 
     FastCash(String pin) {
         this.pin = pin;
-        ImageIcon i1 = new ImageIcon(ClassLoader.getSystemResource("icon/ATM.jpg"));
+        ImageIcon i1 = new ImageIcon(ClassLoader.getSystemResource("ATM.jpg"));
         Image i2 = i1.getImage().getScaledInstance(1000, 1180, Image.SCALE_DEFAULT);
         ImageIcon i3 = new ImageIcon(i2);
         JLabel l3 = new JLabel(i3);
@@ -82,7 +83,7 @@ public class FastCash extends JFrame implements ActionListener {
             ResultSet rs = c.s.executeQuery("select * from bank where pin = '"+pin+"'");
             int balance = 0;
             while (rs.next()) {
-                if (rs.getString("mode").equals("Deposit")) {
+                if (rs.getString("Withdrawl").equals("Deposit")) {
                     balance += Integer.parseInt(rs.getString("amount"));
                 } else {
                     balance -= Integer.parseInt(rs.getString("amount"));
@@ -98,7 +99,9 @@ public class FastCash extends JFrame implements ActionListener {
                 new Transactions(pin).setVisible(true);
             }else{
                 Date date = new Date();
-                c.s.executeUpdate("insert into bank values('"+pin+"', '"+date+"', 'Withdrawl', '"+amount+"')");
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String formattedDate = dateFormat.format(new Date());
+                c.s.executeUpdate("insert into bank values('"+pin+"', '"+formattedDate+"', 'Withdrawl', '"+amount+"')");
                 JOptionPane.showMessageDialog(null, "Rs. "+amount+" Debited Successfully");
                     
                 setVisible(false);
